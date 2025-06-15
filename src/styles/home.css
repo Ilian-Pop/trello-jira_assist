@@ -41,12 +41,14 @@ body{
     margin-bottom: 2vh;
 }
 p{
+    width: 95%;
     padding: 2vh;
     padding-top: 1vh;
     font-size: 1.5vw;
     color: #CBE894;
     font-family: "Inder";
     height: 30vh;
+    text-align: left;
 }
 .inputer{
     display: flex;

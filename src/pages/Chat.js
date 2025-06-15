@@ -1,13 +1,17 @@
-function Chat(){
+import { useState } from "react"
+import { setExit } from "../functions/checkLoginFunction"
+function Chat(props){
+    const [value, setValue] = useState('');
+    function changeText(e){
+        if(value==="Вихід"){
+            setExit(props.setLogin)
+        }
+    }
     return<div className="osnova">
-        <p>
-            Trello — безкоштовна багатоплатформна система управління проєктами, розроблена Trello Enterprise, дочірньою компанією Atlassian.[5] Створена у 2011 році компанією Fog Creek Software (тепер Glitch) для створення окремої компанії в Нью-Йорку у 2014 році[6][7][8] й продана Atlassian в січні 2017 року.[9]
-Вона використовує парадигму керування проєктами, відому як канбан. Проєкти зображуються дошками, що містять списки. Списки містять картки, якими зображуються задачі. Картки повинні переходити з попереднього списку до наступного (за допомогою перетягування), таким чином зображаючи рух якоїсь функції від ідеї, аж до тестування. Картці може бути присвоєно відповідальних за неї користувачів. Користувачі та дошки можуть об'єднуватись в команди.
-2017 року журнал PC оцінив сервіс Trello у 3,5 з 5 зірок, назвавши його гнучким і креативним
-        </p>
+        <p>{'Вітаю '+localStorage.getItem('lastName')+' '+localStorage.getItem('name')+' '+localStorage.getItem('middleName')+'!'}</p>
         <div className="inputer">
-            <input placeholder="MESSAGE"/>
-            <button>SEND</button>
+            <input value={value} onChange={(e)=>setValue(e.target.value)} placeholder="ПОВІДОМЛЕННЯ"/>
+            <button onClick={()=>changeText()}>{'>'}</button>
         </div>
     </div>
 }
