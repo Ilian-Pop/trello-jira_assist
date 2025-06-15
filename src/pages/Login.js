@@ -12,7 +12,7 @@ function Login(){
         <input value={middleName} onChange={(e)=>{setMiddleName(e.target.value)}} placeholder="MIDDLENAME"/>
         <input value={trello} onChange={(e)=>{setTrello(e.target.value)}} placeholder="TRELLO"/>
         <input value={jira} onChange={(e)=>{setJira(e.target.value)}} placeholder="JIRA"/>
-        <button>SEND</button>
+        <button>LOGIN</button>
     </div>
 }
 export default Login
