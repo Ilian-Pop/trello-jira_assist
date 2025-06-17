@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { checkAiMessage } from "../functions/witAiFunctions";
 function Chat(props) {
@@ -13,7 +14,14 @@ function Chat(props) {
   );
   return (
     <div className="osnova">
-      <p>{resp}</p>
+      <p>
+        {resp.split("\n").map((item, index) => (
+          <React.Fragment key={index}>
+            {item}
+            <br />
+          </React.Fragment>
+        ))}
+      </p>
       <div className="inputer">
         <input
           value={value}
