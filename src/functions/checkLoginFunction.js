@@ -15,9 +15,20 @@ function checkLoginFunction() {
   if (!localStorage.getItem("jira")) {
     err = false;
   }
+  if (!localStorage.getItem("mail")) {
+    err = false;
+  }
   return err;
 }
-function setCheckLogin1(name, lastName, middleName, trello, jira, setLogin) {
+function setCheckLogin1(
+  name,
+  lastName,
+  middleName,
+  trello,
+  jira,
+  setLogin,
+  mail
+) {
   let err = false;
   if (name) {
     localStorage.setItem("name", name);
@@ -41,6 +52,14 @@ function setCheckLogin1(name, lastName, middleName, trello, jira, setLogin) {
   }
   if (jira) {
     localStorage.setItem("jira", jira);
+  } else {
+    err = true;
+  }
+  if (err === false) {
+    setLogin(true);
+  }
+  if (mail) {
+    localStorage.setItem("mail", mail);
   } else {
     err = true;
   }

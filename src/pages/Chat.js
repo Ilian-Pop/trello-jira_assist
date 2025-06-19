@@ -17,7 +17,7 @@ function Chat(props) {
       <p>
         {resp.split("\n").map((item, index) => (
           <React.Fragment key={index}>
-            {item}
+            {item.charAt(0) === "," ? item.slice(1) : item}
             <br />
           </React.Fragment>
         ))}

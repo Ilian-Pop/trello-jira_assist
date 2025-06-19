@@ -95,11 +95,17 @@ button {
   }
   .osnova {
     width: 95vw;
-    height: 95vh;
+    height: 80vh;
     border-radius: 7vw;
   }
   p {
     font-size: 2vh;
+  }
+  a {
+    color: hsl(81, 77%, 26%);
+  }
+  a:visited {
+    color: #5e3cda;
   }
   button {
     border-radius: 3vh;
