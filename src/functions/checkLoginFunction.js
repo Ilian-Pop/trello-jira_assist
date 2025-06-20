@@ -55,9 +55,6 @@ function setCheckLogin1(
   } else {
     err = true;
   }
-  if (err === false) {
-    setLogin(true);
-  }
   if (mail) {
     localStorage.setItem("mail", mail);
   } else {

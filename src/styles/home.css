@@ -24,7 +24,7 @@ body {
 }
 .loginPanel {
   width: 38vw;
-  height: 80vh;
+  height: 85vh;
   background-color: rgba(18, 63, 60, 0.7);
   border-radius: 3vw;
   display: flex;
@@ -51,6 +51,9 @@ p {
   font-family: "Inder";
   height: 30vh;
   text-align: left;
+}
+a {
+  color: hsl(81, 77%, 26%);
 }
 .inputer {
   display: flex;
@@ -87,11 +90,11 @@ button {
   color: white;
   font-size: 2vw;
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   .loginPanel {
+    height: 85vh;
     width: 98vw;
     border-radius: 10vw;
-    margin-bottom: 3vh;
   }
   .osnova {
     width: 95vw;
@@ -115,9 +118,9 @@ button {
     font-size: 2vh;
   }
   input {
-    height: 10vh;
+    height: 4vh;
     width: 75vw;
-    font-size: 4vh;
+    font-size: 5vw;
     padding-left: 2vw;
     border-radius: 3vh;
   }

@@ -1,18 +1,27 @@
 import React, { useState } from "react";
 import { setCheckLogin1 } from "../functions/checkLoginFunction";
 function Login(props) {
-  const [name, setName] = useState(localStorage.getItem("name"));
-  const [lastName, setLastName] = useState(localStorage.getItem("lastName"));
-  const [middleName, setMiddleName] = useState(
-    localStorage.getItem("middleName")
+  const [name, setName] = useState(localStorage.getItem("name") || "");
+  const [lastName, setLastName] = useState(
+    localStorage.getItem("lastName") || ""
   );
-  const [mail, setMail] = useState(localStorage.getItem("mail"));
-  const [trello, setTrello] = useState(localStorage.getItem("trello"));
-  const [jira, setJira] = useState(localStorage.getItem("jira"));
+  const [middleName, setMiddleName] = useState(
+    localStorage.getItem("middleName") || ""
+  );
+  const [mail, setMail] = useState(localStorage.getItem("mail") || "");
+  const [trello, setTrello] = useState(localStorage.getItem("trello") || "");
+  const [jira, setJira] = useState(localStorage.getItem("jira") || "");
+  const [first, setFirst] = useState(false);
 
   return (
     <div className="loginPanel">
       <input
+        style={{
+          borderBottom:
+            !first || /^[А-ЯЇЄІҐ][а-яїєіїґ']*[а-яїєіїґ]$/.test(name)
+              ? "none"
+              : "1px solid red",
+        }}
         value={name}
         onChange={(e) => {
           setName(e.target.value);
@@ -20,6 +29,12 @@ function Login(props) {
         placeholder="ІМ'Я"
       />
       <input
+        style={{
+          borderBottom:
+            !first || /^[А-ЯЇЄІҐ][а-яїєіїґ']*[а-яїєіїґ]$/.test(lastName)
+              ? "none"
+              : "1px solid red",
+        }}
         value={lastName}
         onChange={(e) => {
           setLastName(e.target.value);
@@ -27,6 +42,12 @@ function Login(props) {
         placeholder="ПРІЗВИЩЕ"
       />
       <input
+        style={{
+          borderBottom:
+            !first || /^[А-ЯЇЄІҐ][а-яїєіїґ']*[а-яїєіїґ]$/.test(middleName)
+              ? "none"
+              : "1px solid red",
+        }}
         value={middleName}
         onChange={(e) => {
           setMiddleName(e.target.value);
@@ -34,6 +55,12 @@ function Login(props) {
         placeholder="ПО-БАТЬКОВІ"
       />
       <input
+        style={{
+          borderBottom:
+            !first || /^[A-Za-z0-9\-\_\.]+@gmail.com$/.test(mail)
+              ? "none"
+              : "1px solid red",
+        }}
         value={mail}
         onChange={(e) => {
           setMail(e.target.value);
@@ -41,13 +68,19 @@ function Login(props) {
         placeholder="ЕЛЕКТРОННА-АДРЕСА"
       />
       <input
-        value={trello}
+        style={{
+          borderBottom: !first || trello !== "" ? "none" : "1px solid red",
+        }}
+        e={trello}
         onChange={(e) => {
           setTrello(e.target.value);
         }}
         placeholder="TRELLO"
       />
       <input
+        style={{
+          borderBottom: !first || jira !== "" ? "none" : "1px solid red",
+        }}
         value={jira}
         onChange={(e) => {
           setJira(e.target.value);
@@ -55,7 +88,8 @@ function Login(props) {
         placeholder="JIRA"
       />
       <button
-        onClick={() =>
+        onClick={() => {
+          setFirst(true);
           setCheckLogin1(
             name,
             lastName,
@@ -64,8 +98,8 @@ function Login(props) {
             jira,
             props.setLogin,
             mail
-          )
-        }
+          );
+        }}
       >
         ВХІД
       </button>
