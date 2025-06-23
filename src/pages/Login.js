@@ -103,10 +103,16 @@ function Login(props) {
       >
         ВХІД
       </button>
-      <a href="https://trello.com/1/authorize?expiration=never&name=MyApp&scope=read,write&response_type=token&key=9196c2e8d6b5c8a260545d92801f4123">
+      <a
+        target="_blank"
+        href="https://trello.com/1/authorize?expiration=never&name=MyApp&scope=read,write&response_type=token&key=9196c2e8d6b5c8a260545d92801f4123"
+      >
         Отримати TRELLO token
       </a>
-      <a href="https://id.atlassian.com/manage-profile/security/api-tokens">
+      <a
+        target="_blank"
+        href="https://id.atlassian.com/manage-profile/security/api-tokens"
+      >
         Отримати JIRA token
       </a>
     </div>

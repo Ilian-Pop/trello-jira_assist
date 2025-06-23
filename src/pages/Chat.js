@@ -23,14 +23,14 @@ function Chat(props) {
         ))}
       </p>
       <div className="inputer">
-        <input
+        <textarea
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="ПОВІДОМЛЕННЯ"
         />
         <button
-          onClick={() => {
-            checkAiMessage({
+          onClick={async () => {
+            await checkAiMessage({
               value: value,
               setValue: setValue,
               resp: resp,

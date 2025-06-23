@@ -72,11 +72,25 @@ input {
   width: 47vw;
   padding-left: 1.5vw;
 }
-input:focus {
+textarea {
+  font-family: "Jaro", sans-serif;
+  background-color: rgba(22, 37, 44, 0.7);
+  border: none;
+  font-size: 2vw;
+  color: #cbe894;
+  border-radius: 1.5vw;
+  height: 8vh;
+  width: 47vw;
+  resize: none;
+  padding-left: 1.5vw;
+}
+input:focus,
+textarea:focus {
   outline: none;
   box-shadow: none;
 }
-input::-webkit-input-placeholder {
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
   color: #cbe894;
   opacity: 0.5;
 }
@@ -119,6 +133,14 @@ button {
   }
   input {
     height: 4vh;
+    width: 75vw;
+    font-size: 5vw;
+    padding-left: 2vw;
+    border-radius: 3vh;
+  }
+  textarea {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
     width: 75vw;
     font-size: 5vw;
     padding-left: 2vw;

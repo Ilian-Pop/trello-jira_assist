@@ -30,17 +30,17 @@ function setCheckLogin1(
   mail
 ) {
   let err = false;
-  if (name) {
+  if (/^[А-ЯЇЄІҐ][а-яїєіїґ']*[а-яїєіїґ]$/.test(name)) {
     localStorage.setItem("name", name);
   } else {
     err = true;
   }
-  if (lastName) {
+  if (/^[А-ЯЇЄІҐ][а-яїєіїґ']*[а-яїєіїґ]$/.test(lastName)) {
     localStorage.setItem("lastName", lastName);
   } else {
     err = true;
   }
-  if (middleName) {
+  if (/^[А-ЯЇЄІҐ][а-яїєіїґ']*[а-яїєіїґ]$/.test(middleName)) {
     localStorage.setItem("middleName", middleName);
   } else {
     err = true;
@@ -55,7 +55,7 @@ function setCheckLogin1(
   } else {
     err = true;
   }
-  if (mail) {
+  if (/^[A-Za-z0-9\-\_\.]+@gmail.com$/.test(mail)) {
     localStorage.setItem("mail", mail);
   } else {
     err = true;
