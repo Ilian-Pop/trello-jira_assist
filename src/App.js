@@ -7,6 +7,7 @@ function App() {
   const [checkLogin, setChekLogin] = useState(false);
   useEffect(() => {
     setChekLogin(checkLoginFunction);
+    localStorage.setItem("platform", "trello");
   }, []);
   return (
     <>

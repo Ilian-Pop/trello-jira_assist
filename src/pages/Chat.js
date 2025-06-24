@@ -33,7 +33,7 @@ function Chat(props) {
             await checkAiMessage({
               value: value,
               setValue: setValue,
-              resp: resp,
+              Resp: resp,
               setResp: setResp,
               setExit: props.setLogin,
             });
