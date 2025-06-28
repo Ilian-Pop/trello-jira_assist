@@ -1,21 +1,21 @@
-function checkLoginFunction() {
+async function checkLoginFunction() {
   let err = true;
-  if (!localStorage.getItem("name")) {
+  if (!(await localStorage.getItem("name"))) {
     err = false;
   }
-  if (!localStorage.getItem("lastName")) {
+  if (!(await localStorage.getItem("lastName"))) {
     err = false;
   }
-  if (!localStorage.getItem("middleName")) {
+  if (!(await localStorage.getItem("middleName"))) {
     err = false;
   }
-  if (!localStorage.getItem("trello")) {
+  if (!(await localStorage.getItem("trello"))) {
     err = false;
   }
-  if (!localStorage.getItem("jira")) {
+  if (!(await localStorage.getItem("jira"))) {
     err = false;
   }
-  if (!localStorage.getItem("mail")) {
+  if (!(await localStorage.getItem("mail"))) {
     err = false;
   }
   return err;

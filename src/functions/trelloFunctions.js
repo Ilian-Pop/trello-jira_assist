@@ -16,6 +16,9 @@ async function trelloSearch(title, setResp) {
       return {
         card: { id: res.data.cards[0].id, name: res.data.cards[0].name },
       };
+    } else {
+      setResp("Даний об'єкт відсутній");
+      return false;
     }
   } catch (e) {
     setResp("У вас проблеми з токеном");
@@ -54,7 +57,7 @@ async function getBoards(setResp) {
 //Функція для отримання карток
 async function getListFromBoard(id, setResp) {
   const boards = await getBoards(setResp);
-  if (boards) {
+  if (boards && boards.length !== 0) {
     const board = boards.find((e) => {
       return e.id === id;
     });
@@ -88,6 +91,30 @@ async function getListFromBoard(id, setResp) {
     } else {
       return "Такої дошки неіснує";
     }
+  } else {
+    setResp("Нема такої дошки");
+    return false;
+  }
+}
+//Функція для отримання карток
+async function getCardsFromList(props) {
+  try {
+    const cards = await axios.get(
+      `http://api.trello.com/1/lists/${props.list.id}/cards?key=${
+        process.env.REACT_APP_TRELLO_API_KEY
+      }&token=${localStorage.getItem("trello")}`
+    );
+    if (cards.data && cards.data.length !== 0) {
+      return cards.data.map((item) => {
+        return { name: item.name, id: item.id };
+      });
+    } else {
+      props.setResp(props.list.name + ": пустий");
+      return false;
+    }
+  } catch {
+    props.setResp(props.list.name + ": пустий");
+    return false;
   }
 }
 //Функції для звязку з чатом
@@ -101,123 +128,191 @@ async function getMyBoards(setResp) {
           return board.name + "\n";
         })
     );
+    localStorage.setItem("list", "");
+    localStorage.setItem("task", "");
   }
 }
 //Функція для отримання списків
 async function getListsFromName(props) {
   const board = await trelloSearch(props.board, props.setResp);
-  if (board) {
-    if (board.board.id) {
-      const result = await getListFromBoard(board.board.id, props.setResp);
+  if (board && board.board) {
+    const result = await getListFromBoard(board.board.id, props.setResp);
+    if (result) {
       props.setResp(
         board.board.name +
-          "\n" +
+          ":\n" +
           result.map((board) => {
             return board.name + "\n";
           })
       );
-    } else {
-      props.setResp("Такої дошки не існує");
+      localStorage.setItem("task", "");
     }
   } else {
-    props.setResp(board);
+    props.setResp("Такої дошки не існує");
   }
 }
 //Функція для отримання карток
 async function getCards(props) {
-  const board = await trelloSearch(props.board, props.setResp);
+  const board = await trelloSearch(
+    await localStorage.getItem("board"),
+    props.setResp
+  );
   if (board) {
-    const lists = await getListFromBoard(board.id, props.setResp);
-    if (lists) {
-      const list = lists.find((list) => {
-        return list.name.toLowerCase() === props.list.toLowerCase();
-      });
-      if (list) {
-        const cards = await getCardsFromList({ list: list }, props.setResp);
-        if (cards !== props.list + " пустий") {
-          props.setResp(cards);
-        } else {
-          props.setResp(props.list + " пустий");
-        }
-      }
-    }
-  }
-}
-//Функція для створення карток
-async function createNewCard(props) {
-  const board = await trelloSearch(props.board);
-  if (board.board) {
-    const lists = await getListFromBoard(board.board.id);
+    const lists = await getListFromBoard(board.board.id, props.setResp);
     const list = lists.find((list) => {
-      return list.name.toLowerCase() === props.list.toLowerCase();
+      return (
+        list.name.toLowerCase() ===
+        localStorage.getItem("list").toLocaleLowerCase()
+      );
     });
-    if (list) {
-      try {
-        await axios.post("https://api.trello.com/1/cards", {
-          idList: list.id,
-          name: props.card,
-          key: process.env.REACT_APP_TRELLO_API_KEY,
-          token: localStorage.getItem("trello"),
-        });
-        props.setResp("Картку додано успішно");
-      } catch (e) {
-        props.setResp(e.message);
-      }
-    } else {
-      props.setResp("Нема такого списку");
-    }
-  } else {
-    props.setResp("Нема такої дошки");
-  }
-}
-async function createNewList(props) {
-  const board = await trelloSearch(props.name);
-  if (board !== "У вас проблеми з токеном") {
-    if (board.board) {
-      try {
-        await axios.post("https://api.trello.com/1/lists", {
-          name: props.title,
-          idBoard: board.board.id,
-          key: process.env.REACT_APP_TRELLO_API_KEY,
-          token: localStorage.getItem("trello"),
-        });
-        const res = await getListFromBoard(board.board.id);
+    if (list && list.length !== 0) {
+      const cards = await getCardsFromList({
+        setResp: props.setResp,
+        list: list,
+      });
+      if (cards) {
+        console.log(cards);
         props.setResp(
-          board.board.name +
+          list.name +
             ":\n" +
-            res.map((list) => {
-              return list.name + "\n";
+            cards.map((card) => {
+              return card.name + "\n";
             })
         );
-      } catch {
-        props.setResp("Сталася критична помилка");
       }
     } else {
-      props.setResp("Нема такої дошки");
+      props.setResp("Ви вказали неправильний список, або дошку");
+    }
+  }
+}
+async function createNewCard(setResp) {
+  const board = await trelloSearch(
+    await localStorage.getItem("board"),
+    setResp
+  );
+  if (board.board) {
+    const lists = await getListFromBoard(board.board.id);
+    if (lists && lists.length !== 0) {
+      const list = lists.find((list) => {
+        return (
+          list.name.toLowerCase() === localStorage.getItem("list").toLowerCase()
+        );
+      });
+      if (list) {
+        try {
+          await axios.post("https://api.trello.com/1/cards", {
+            idList: list.id,
+            name: await localStorage.getItem("task"),
+            key: process.env.REACT_APP_TRELLO_API_KEY,
+            token: await localStorage.getItem("trello"),
+          });
+          setResp("Нову картку створено успішно");
+        } catch (e) {
+          setResp("Виникли проблеми");
+        }
+      } else {
+        setResp("Нема такого списку");
+      }
+    }
+  }
+}
+async function createNewList(setResp) {
+  const board = await trelloSearch(
+    await localStorage.getItem("board"),
+    setResp
+  );
+  if (board.board) {
+    try {
+      await axios.post("https://api.trello.com/1/lists", {
+        idBoard: board.board.id,
+        name: await localStorage.getItem("list"),
+        key: process.env.REACT_APP_TRELLO_API_KEY,
+        token: await localStorage.getItem("trello"),
+      });
+      setResp("Список додано успішно");
+    } catch (e) {
+      setResp("Списку створено не було");
     }
   } else {
-    props.setResp(board);
+    setResp("Дана дошка відсутня");
   }
 }
-async function getCardsFromList(props) {
-  try {
-    const cards = await axios.get(
-      `http://api.trello.com/1/lists/${props.list.id}/cards?key=${
-        process.env.REACT_APP_TRELLO_API_KEY
-      }&=${localStorage.getItem("trello")}`
-    );
-    return cards.data.map((item) => {
-      return { name: item.name, id: item.id };
-    });
-  } catch {
-    return props.list.name + " пустий";
+async function deleteList(setResp) {
+  const board = await trelloSearch(await localStorage.getItem("board"));
+  if (board.board) {
+    const lists = await getListFromBoard(board.board.id, setResp);
+    if (lists) {
+      const list = lists.find((list) => {
+        return (
+          list.name.toLowerCase() === localStorage.getItem("list").toLowerCase()
+        );
+      });
+      if (list) {
+        try {
+          await axios.put(
+            `https://api.trello.com/1/lists/${list.id}/closed?key=${
+              process.env.REACT_APP_TRELLO_API_KEY
+            }&token=${localStorage.getItem("trello")}`,
+            { value: true }
+          );
+          setResp("Список видалено успішно");
+          localStorage.setItem("list", "");
+          localStorage.setItem("task", "");
+        } catch (e) {
+          setResp("Список видалити не вдалося");
+        }
+      } else {
+        setResp("Такого списку не існує");
+        localStorage.setItem("list", "");
+      }
+    }
   }
 }
-
+async function deleteCard(setResp) {
+  const board = await trelloSearch(localStorage.getItem("board"), setResp);
+  if (board && board.board) {
+    const lists = await getListFromBoard(board.board.id, setResp);
+    if (lists) {
+      const list = lists.find(
+        (list) =>
+          list.name.toLowerCase() === localStorage.getItem("list").toLowerCase()
+      );
+      if (list) {
+        const cards = getCardsFromList({ list: list, setResp: setResp });
+        if (cards) {
+          const card = await cards.find((card) => {
+            return card.name.toLowerCase() === localStorage.getItem("task");
+          });
+          if (card) {
+            try {
+              axios.delete(
+                `https://api.trello.com/1/cards/${card.id}?key=${
+                  process.env.REACT_APP_TRELLO_API_KEY
+                }&token=${localStorage.getItem("trello")}`
+              );
+              setResp("Картка видалена успішно");
+              localStorage.setItem("task", "");
+            } catch {
+              setResp("Видалити картку не вдалося");
+              localStorage.setItem("task", "");
+            }
+          } else {
+            setResp("Ви ввели не валідну картку");
+            localStorage.setItem("task", "");
+          }
+        }
+      } else {
+        setResp("Ви ввели невалідний список");
+      }
+    }
+  }
+}
 export {
   getMyBoards,
   getListsFromName,
   createNewList,
   createNewCard,
   getCards,
+  deleteList,
+  deleteCard,
 };
