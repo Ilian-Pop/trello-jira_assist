@@ -278,7 +278,7 @@ async function deleteCard(setResp) {
           list.name.toLowerCase() === localStorage.getItem("list").toLowerCase()
       );
       if (list) {
-        const cards = getCardsFromList({ list: list, setResp: setResp });
+        const cards = await getCardsFromList({ list: list, setResp: setResp });
         if (cards) {
           const card = await cards.find((card) => {
             return card.name.toLowerCase() === localStorage.getItem("task");

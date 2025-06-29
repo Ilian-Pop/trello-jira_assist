@@ -6,9 +6,14 @@ import { checkLoginFunction } from "./functions/checkLoginFunction";
 function App() {
   const [checkLogin, setChekLogin] = useState(false);
   useEffect(() => {
-    setChekLogin(checkLoginFunction);
-    localStorage.setItem("platform", "trello");
+    async function fetchLoginStatus() {
+      const isLoggedIn = await checkLoginFunction();
+      setChekLogin(isLoggedIn);
+      localStorage.setItem("platform", "trello");
+    }
+    fetchLoginStatus();
   }, []);
+
   return (
     <>
       {checkLogin ? (
